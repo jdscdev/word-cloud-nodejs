@@ -1,5 +1,6 @@
 const express = require('express');
 const axios = require('axios');
+const constants = require('./../constants');
 const router = express.Router();
 
 async function fetchEndpoints() {
@@ -22,7 +23,7 @@ async function wordWork() {
     eData.data.body.split(' ').map(word => {
       const wordAux = word.replace(/[^a-zA-Z ]/g, '').toLowerCase();
       
-      if (wordAux.length > 3) {
+      if (!constants.STOP_WORDS.includes(wordAux)) {
         if (!uniqueWords.includes(wordAux)) {
           resultArray.push({ word: wordAux, count: 1 });
           uniqueWords.push(wordAux);
@@ -32,14 +33,14 @@ async function wordWork() {
       }
     });
   });
-  // removes words with just 1 count and sort by count
+  // removes words with just 1 count and sort by count in descending order
   return resultArray
     .filter(o => o.count > 1)
     .sort((a, b) => b.count - a.count);
 }
 
 router.get('/', async (_, res) => {
-  const results = await wordWork()//;
+  const results = await wordWork();
   res.render('index', { results });
 });
 
