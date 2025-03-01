@@ -1,7 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  each result in results
-    div
-      p= result.word + ' ' + result.count
+  h1 Words ordered by frequency
+  table
+      tr
+        th Word
+        th Absolute Frequency
+        th Relative Frequency
+      each result in wordResults
+        tr
+          td= result.word
+          td= result.abs_frequency
+          td= result.rel_frequency
